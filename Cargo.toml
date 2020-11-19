@@ -7,7 +7,7 @@ license-file = "LICENSE"
 description = "Get IP geolocation information"
 repository = "https://github.com/DefunctLizard/locator/"
 keywords = ["geolocation", "ip", "locator", "whatismyipaddress"]
-categories = "network-programming"
+categories = ["network-programming"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
