@@ -6,6 +6,7 @@ edition = "2018"
 license-file = "LICENSE"
 description = "Get IP address geolocation information freely."
 repository = "https://github.com/DefunctLizard/locator/"
+documentation = "https://docs.rs/locator"
 keywords = ["geolocation", "ip", "locator", "whatismyipaddress"]
 categories = ["network-programming"]
 
