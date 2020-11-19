@@ -1,13 +1,13 @@
 [package]
 name = "locator"
-version = "0.1.1"
+version = "0.2.0"
 authors = ["DefunctLizard <grantshandy@gmail.com>"]
 edition = "2018"
 license-file = "LICENSE"
 description = "Get IP address geolocation information freely."
 repository = "https://github.com/DefunctLizard/locator/"
 documentation = "https://docs.rs/locator"
-keywords = ["geolocation", "ip", "locator", "whatismyipaddress"]
+keywords = ["geolocation", "ip", "locator", "geolocator"]
 categories = ["network-programming"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

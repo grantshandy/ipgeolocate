@@ -1,7 +1,7 @@
 # locator
 Get IP address geolocation information freely.
 ```
-locator = 0.1.1
+locator = 0.2.0
 ```
 
 ## Example
@@ -16,21 +16,22 @@ fn main() {
     };
 }
 ```
-
-Output:
-```
-1.1.1.1 - Los Angeles
-```
+A more detailed example can be found in the example directory.
 
 ## Fields
+The API can get these fields about IP addresses.
 
-Currently there are only
 - ip
-- city
 - latitude
 - longitude
-
-But more are planned in the future.
+- city
+- region
+- country_code
+- country
+- timezone_gmt
+- timezone
+- isp
+- iptype
 
 ## Credits
 Grant Handy <grantshandy@gmail.com>

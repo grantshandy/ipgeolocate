@@ -6,6 +6,13 @@ pub struct Locator {
     pub latitude: String,
     pub longitude: String,
     pub city: String,
+    pub region: String,
+    pub country_code: String,
+    pub country: String,
+    pub timezone_gmt: String,
+    pub timezone: String,
+    pub isp: String,
+    pub iptype: String,
 }
 
 impl Locator {
@@ -57,15 +64,78 @@ impl Locator {
             }
         };
 
+        let region_str = match &parsed_json["region"] {
+            Value::String(region_str) => region_str,
+            _ => {
+                return Err("Unable to find region in parsed JSON".to_string());
+            }
+        };
+
+        let country_code_str = match &parsed_json["country_code"] {
+            Value::String(country_code_str) => country_code_str,
+            _ => {
+                return Err("Unable to find country_code in parsed JSON".to_string());
+            }
+        };
+
+        let country_str = match &parsed_json["country"] {
+            Value::String(country_str) => country_str,
+            _ => {
+                return Err("Unable to find country in parsed JSON".to_string());
+            }
+        };
+
+        let timezone_gmt_str = match &parsed_json["timezone_gmt"] {
+            Value::String(timezone_gmt_str) => timezone_gmt_str,
+            _ => {
+                return Err("Unable to find timezone_gmt in parsed JSON".to_string());
+            }
+        };
+
+        let timezone_str = match &parsed_json["timezone"] {
+            Value::String(timezone_str) => timezone_str,
+            _ => {
+                return Err("Unable to find timezone in parsed JSON".to_string());
+            }
+        };
+
+        let isp_str = match &parsed_json["isp"] {
+            Value::String(isp_str) => isp_str,
+            _ => {
+                return Err("Unable to find isp in parsed JSON".to_string());
+            }
+        };
+
+        let iptype_str = match &parsed_json["type"] {
+            Value::String(type_str) => type_str,
+            _ => {
+                return Err("Unable to find type in parsed JSON".to_string());
+            }
+        };
+
         let latitude = latitude_str.to_string();
         let longitude = longitude_str.to_string();
         let city = city_str.to_string();
+        let region = region_str.to_string();
+        let country_code = country_code_str.to_string();
+        let country = country_str.to_string();
+        let timezone_gmt = timezone_gmt_str.to_string();
+        let timezone = timezone_str.to_string();
+        let isp = isp_str.to_string();
+        let iptype = iptype_str.to_string();
 
         let result = Locator {
             ip,
             latitude,
             longitude,
             city,
+            region,
+            country_code,
+            country,
+            timezone_gmt,
+            timezone,
+            isp,
+            iptype,
         };
 
         Ok(result)
