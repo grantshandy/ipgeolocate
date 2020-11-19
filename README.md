@@ -16,7 +16,8 @@ fn main() {
     };
 }
 ```
-A more detailed example can be found in the example directory.
+
+This and more examples are found in the examples directory.
 
 ## Fields
 The API can get these fields about IP addresses.

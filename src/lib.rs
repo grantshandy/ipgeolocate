@@ -1,5 +1,8 @@
+#![feature(ip)]
+
 use serde_json::Value;
 use ureq::get;
+use std::net::{Ipv4Addr, Ipv6Addr};
 
 pub struct Locator {
     pub ip: String,
@@ -16,7 +19,25 @@ pub struct Locator {
 }
 
 impl Locator {
-    pub fn get(ip: String) -> std::result::Result<Self, String> {
+    pub fn get_ipv4(ip: Ipv4Addr) -> std::result::Result<Self, String> {
+        if ip.is_private() {
+            return Err(format!("IP can't be private"));
+        } else {
+            let locate = Locator::get(ip.to_string().as_str());
+            locate
+        }
+    }
+
+    pub fn get_ipv6(ip: Ipv6Addr) -> std::result::Result<Self, String> {
+        if !ip.is_global() {
+            return Err(format!("IP can't be private"));
+        } else {
+            let locate = Locator::get(ip.to_string().as_str());
+            locate
+        }
+    }
+
+    pub fn get(ip: &str) -> std::result::Result<Self, String> {
         let url = format!("http://ipwhois.app/json/{}", ip);
 
         let response = get(&url).call();
@@ -29,7 +50,7 @@ impl Locator {
         let data = match response.into_string() {
             Ok(data) => data,
             Err(error) => {
-                return Err(format!("Error transforming to string: {}", error));
+                return Err(format!("Couldn't transform to string: {}", error));
             }
         };
 
@@ -37,7 +58,7 @@ impl Locator {
         let parsed_json: Value = match serde_json::from_str(&data) {
             Ok(parsed_json) => parsed_json,
             Err(error) => {
-                return Err(format!("Error parsing json: {}", error));
+                return Err(format!("Couldn't parse json: {}", error));
             }
         };
 
@@ -113,6 +134,7 @@ impl Locator {
             }
         };
 
+        let ip = ip.to_string();
         let latitude = latitude_str.to_string();
         let longitude = longitude_str.to_string();
         let city = city_str.to_string();
