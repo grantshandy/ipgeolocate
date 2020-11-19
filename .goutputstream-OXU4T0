@@ -1,6 +1,8 @@
 # locator
 Get IP address geolocation information freely.
-
+```
+locator = 0.1.1
+```
 
 ## Example
 Using locator is really quite easy:

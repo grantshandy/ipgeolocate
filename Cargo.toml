@@ -1,10 +1,10 @@
 [package]
 name = "locator"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["DefunctLizard <grantshandy@gmail.com>"]
 edition = "2018"
 license-file = "LICENSE"
-description = "Get IP geolocation information"
+description = "Get IP address geolocation information freely."
 repository = "https://github.com/DefunctLizard/locator/"
 keywords = ["geolocation", "ip", "locator", "whatismyipaddress"]
 categories = ["network-programming"]
