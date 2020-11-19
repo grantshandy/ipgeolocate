@@ -1,7 +1,7 @@
 # locator
 Get IP address geolocation information freely.
 ```
-locator = 0.2.0
+locator = 0.2.1
 ```
 
 ## Example
@@ -11,7 +11,7 @@ use locator::Locator;
 
 fn main() {
     match Locator::get("1.1.1.1") {
-      Ok(ip) => println!("{} - {}", ip.ip, ip.city),
+      Ok(ip) => println!("{} - {} ({})", ip.ip, ip.city, ip.country),
       Err(error) => println!("Error getting data: {}", error),
     };
 }
