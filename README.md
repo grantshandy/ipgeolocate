@@ -1,17 +1,22 @@
 # locator
 Get IP address geolocation information freely.
+
+Add to `Cargo.toml`.
 ```
-locator = 0.2.1
+locator = 0.2.2
 ```
 
 ## Example
 Using locator is really quite easy:
 ```
 use locator::Locator;
+use std::net::Ipv4Addr;
 
 fn main() {
-    match Locator::get("1.1.1.1") {
-      Ok(ip) => println!("{} - {} ({})", ip.ip, ip.city, ip.country),
+    let ip = Ipv4Addr::new(1, 1, 1, 1);
+
+    match Locator::get_ipv4(ip) {
+      Ok(ip) => println!("{} - {}", ip.ip, ip.city),
       Err(error) => println!("Error getting data: {}", error),
     };
 }
