@@ -1,4 +1,4 @@
-# locator
+# ipgeolocate
 Get IP address geolocation information freely.
 
 Add to `Cargo.toml`.
