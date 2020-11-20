@@ -1,4 +1,4 @@
-use locator::Locator;
+use ipgeolocate::Locator;
 use std::net::Ipv6Addr;
 
 // Prints the city where the Ipv6 ::1c9:0:0:afc8:0:1 is.

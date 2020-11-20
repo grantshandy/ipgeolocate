@@ -1,4 +1,4 @@
-use locator::Locator;
+use ipgeolocate::Locator;
 use std::env;
 
 // A simple CLI application for getting the city and country that an IP is located in.

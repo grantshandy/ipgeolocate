@@ -1,4 +1,4 @@
-use locator::Locator;
+use ipgeolocate::Locator;
 
 // Prints the city where 1.1.1.1 is.
 fn main() {

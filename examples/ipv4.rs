@@ -1,4 +1,4 @@
-use locator::Locator;
+use ipgeolocate::Locator;
 use std::net::Ipv4Addr;
 
 // Prints the city where the Ipv4 1.1.1.1 is.

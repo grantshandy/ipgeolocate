@@ -1,4 +1,4 @@
-use locator::Locator;
+use ipgeolocate::Locator;
 
 // Prints all the possible data points for 1.1.1.1.
 fn main() {
