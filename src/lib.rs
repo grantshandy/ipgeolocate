@@ -14,7 +14,6 @@ pub struct Locator {
     pub country: String,
     pub timezone_gmt: String,
     pub timezone: String,
-    pub isp: String,
     pub iptype: String,
 }
 
@@ -27,6 +26,7 @@ impl Locator {
             locate
         }
     }
+    /// Gets the Locator information for [`Ipv4Addr`].
 
     pub fn get_ipv6(ip: Ipv6Addr) -> std::result::Result<Self, String> {
         if !ip.is_global() {
@@ -36,6 +36,7 @@ impl Locator {
             locate
         }
     }
+    /// Gets the Locator information for [`Ipv6Addr`].
 
     pub fn get(ip: &str) -> std::result::Result<Self, String> {
         let url = format!("http://ipwhois.app/json/{}", ip);
@@ -120,13 +121,6 @@ impl Locator {
             }
         };
 
-        let isp_str = match &parsed_json["isp"] {
-            Value::String(isp_str) => isp_str,
-            _ => {
-                return Err("Unable to find isp in parsed JSON".to_string());
-            }
-        };
-
         let iptype_str = match &parsed_json["type"] {
             Value::String(type_str) => type_str,
             _ => {
@@ -143,7 +137,6 @@ impl Locator {
         let country = country_str.to_string();
         let timezone_gmt = timezone_gmt_str.to_string();
         let timezone = timezone_str.to_string();
-        let isp = isp_str.to_string();
         let iptype = iptype_str.to_string();
 
         let result = Locator {
@@ -156,7 +149,6 @@ impl Locator {
             country,
             timezone_gmt,
             timezone,
-            isp,
             iptype,
         };
 
