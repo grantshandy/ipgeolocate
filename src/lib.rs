@@ -1,5 +1,7 @@
-mod ipwhois;
-mod ip_api;
+#![feature(ip)]
 
-use ipwhois::Locator;
-use ip_api::Query;
+pub mod ipwhois;
+pub mod ip_api;
+
+pub use ipwhois::Locator;
+pub use ip_api::Query;

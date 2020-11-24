@@ -1,5 +1,3 @@
-#![feature(ip)]
-
 use serde_json::Value;
 use ureq::get;
 use std::net::{Ipv4Addr, Ipv6Addr};
