@@ -3,8 +3,12 @@ Get IP address geolocation information freely.
 
 Add to `Cargo.toml`.
 ```
-ipgeolocate = 0.2.2
+ipgeolocate = 0.2.4
 ```
+
+**MAXIUMUM 15,000 queries per hour per user!!!**
+
+For most people this limit should be ok.
 
 ## Example
 Using locator is really quite easy:

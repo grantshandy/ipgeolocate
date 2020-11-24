@@ -1,6 +1,6 @@
 [package]
 name = "ipgeolocate"
-version = "0.2.3"
+version = "0.2.4"
 authors = ["DefunctLizard <grantshandy@gmail.com>"]
 edition = "2018"
 license = "GPL-3.0"
