@@ -42,4 +42,4 @@ The API can get these fields about IP addresses.
 ## Credits
 Grant Handy <grantshandy@gmail.com>
 
-Data provided by [ipwhois](https://ipwhois.io/)
+Data provided by https://freegeoip.app/
