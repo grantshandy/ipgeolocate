@@ -12,7 +12,7 @@ fn main() {
         };
     } else if args[1].to_string().as_str() == "freegeoip" {
         match Locator::freegeoip(args[2].to_string().as_str()) {
-            Ok(ip) => println!("ipwhois: {} ({})", ip.ip, ip.country),
+            Ok(ip) => println!("freegeoip: {} ({})", ip.ip, ip.country),
             Err(error) => println!("Error getting data: {}.", error),
         };
     } else {
