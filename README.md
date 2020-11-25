@@ -2,7 +2,7 @@
 Get IP address geolocation information freely.
 
 ```
-ipgeolocate = "0.2.5"
+ipgeolocate = "0.2.6"
 ```
 Add to `Cargo.toml`.
 
@@ -12,7 +12,7 @@ Using locator is really quite easy:
 use locator::Locator;
 
 fn main() {
-    match Locator::ipwhois("1.1.1.1") {
+    match Locator::ipapi("1.1.1.1") {
       Ok(ip) => println!("{} - {}", ip.ip, ip.city),
       Err(error) => println!("Error getting data: {}", error),
     };
@@ -27,10 +27,14 @@ Some have more free queries, but are less reliable.
 
 Here are the query limits:
 
-| Service   | Limit         |
-| --------- | ------------- |
-| ipwhois   | 10,000/month  |
-| freegeoip | 15,000/hour   |
+| Service       | Limit                     |
+| ---------     | ------------------------- |
+| ipwhois.app   | 10,000/month              |
+| freegeoip.app | 15,000/hour               |
+| ip-api.com    | 45/minute                 |
+| ipapi.co      | 1,000/day (30,000/month)  |
+
+You can use each of these just by running the function of the same name.
 
 ## Fields
 The API can get these fields about IP addresses.
@@ -46,4 +50,8 @@ The API can get these fields about IP addresses.
 ## Credits
 Grant Handy <grantshandy@gmail.com>
 
-Data provided by https://freegeoip.app/
+APIs included
+- https://freegeoip.app/
+- https://ipwhois.app/
+- https://ip-api.com/
+- https://ipapi.co/
