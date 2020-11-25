@@ -2,12 +2,11 @@
 
 use serde_json::Value;
 use ureq::get;
-use std::net::{Ipv4Addr, Ipv6Addr};
 
 pub struct Locator {
     pub ip: String,
-    pub latitude: f64,
-    pub longitude: f64,
+    pub latitude: String,
+    pub longitude: String,
     pub city: String,
     pub region: String,
     pub country: String,
@@ -15,27 +14,7 @@ pub struct Locator {
 }
 
 impl Locator {
-    pub fn get_ipv4(ip: Ipv4Addr) -> std::result::Result<Self, String> {
-        if ip.is_private() {
-            return Err(format!("IP can't be private"));
-        } else {
-            let locate = Locator::get(ip.to_string().as_str());
-            locate
-        }
-    }
-    /// Gets the Locator information for [`Ipv4Addr`].
-
-    pub fn get_ipv6(ip: Ipv6Addr) -> std::result::Result<Self, String> {
-        if !ip.is_global() {
-            return Err(format!("IP can't be private"));
-        } else {
-            let locate = Locator::get(ip.to_string().as_str());
-            locate
-        }
-    }
-    /// Gets the Locator information for [`Ipv6Addr`].
-
-    pub fn get(ip: &str) -> std::result::Result<Self, String> {
+    pub fn freegeoip(ip: &str) -> std::result::Result<Self, String> {
         let url = format!("https://freegeoip.app/json/{}", ip);
 
         let response = get(&url).call();
@@ -64,14 +43,7 @@ impl Locator {
         let latitude = match &parsed_json["latitude"] {
             Value::Number(latitude) => latitude,
             _ => {
-                return Err("Unable to find latitude in parsed JSON".to_string());
-            }
-        };
-
-        let latitude = match latitude.as_f64() {
-            Some(latitude) => latitude,
-            _ => {
-                return Err("latitude not f64".to_string());
+                return Err("Unable to find latitude in parsed JSON".to_string())
             }
         };
 
@@ -83,10 +55,104 @@ impl Locator {
             }
         };
 
-        let longitude = match longitude.as_f64() {
-            Some(longitude) => longitude,
+        let city = match &parsed_json["city"] {
+            Value::String(city_str) => city_str,
             _ => {
-                return Err("longitude not f64".to_string());
+                return Err("Unable to find city in parsed JSON".to_string());
+            }
+        };
+
+        let region = match &parsed_json["region_name"] {
+            Value::String(region_str) => region_str,
+            _ => {
+                return Err("Unable to find region in parsed JSON".to_string());
+            }
+        };
+
+        let country = match &parsed_json["country_name"] {
+            Value::String(country_str) => country_str,
+            _ => {
+                return Err("Unable to find country in parsed JSON".to_string());
+            }
+        };
+
+        let timezone = match &parsed_json["time_zone"] {
+            Value::String(timezone_str) => timezone_str,
+            _ => {
+                return Err("Unable to find timezone in parsed JSON".to_string());
+            }
+        };
+
+        let ip = ip.to_string();
+        let latitude = latitude.to_string();
+        let longitude = longitude.to_string();
+        let city = city.to_string();
+        let region = region.to_string();
+        let country = country.to_string();
+        let timezone = timezone.to_string();
+
+        let result = Locator {
+            ip,
+            latitude,
+            longitude,
+            city,
+            region,
+            country,
+            timezone,
+        };
+
+        Ok(result)
+    }
+
+    pub fn ipwhois(ip: &str) -> std::result::Result<Self, String> {
+        let url = format!("http://ipwhois.app/json/{}", ip);
+
+        let response = get(&url).call();
+
+        if !response.ok() {
+            return Err(format!("Couldn't connect to ipwhois.app"));
+        };
+
+        // Turn the data into a string.
+        let data = match response.into_string() {
+            Ok(data) => data,
+            Err(error) => {
+                return Err(format!("Error transforming to string: {}", error));
+            }
+        };
+
+        // Turn the data into parsed_json
+        let parsed_json: Value = match serde_json::from_str(&data) {
+            Ok(parsed_json) => parsed_json,
+            Err(error) => {
+                return Err(format!("Error parsing json: {}", error));
+            }
+        };
+
+        let success = match &parsed_json["success"] {
+            Value::Bool(latitude_str) => latitude_str,
+            _ => {
+                return Err("Cannot find success in JSON".to_string());
+            }
+        };
+
+        if !success {
+            return Err("You've hit the monthly limit".to_string());
+        }
+
+        // Get latitude from parsed_json
+        let latitude_str = match &parsed_json["latitude"] {
+            Value::String(latitude_str) => latitude_str,
+            _ => {
+                return Err("Unable to find latitude in parsed JSON".to_string());
+            }
+        };
+
+        // Get longitude from parsed_json
+        let longitude_str = match &parsed_json["longitude"] {
+            Value::String(longitude_str) => longitude_str,
+            _ => {
+                return Err("Unable to find longitude in parsed JSON".to_string());
             }
         };
 
@@ -97,21 +163,21 @@ impl Locator {
             }
         };
 
-        let region_str = match &parsed_json["region_name"] {
+        let region_str = match &parsed_json["region"] {
             Value::String(region_str) => region_str,
             _ => {
                 return Err("Unable to find region in parsed JSON".to_string());
             }
         };
 
-        let country_str = match &parsed_json["country_name"] {
+        let country_str = match &parsed_json["country"] {
             Value::String(country_str) => country_str,
             _ => {
                 return Err("Unable to find country in parsed JSON".to_string());
             }
         };
 
-        let timezone_str = match &parsed_json["time_zone"] {
+        let timezone_str = match &parsed_json["timezone"] {
             Value::String(timezone_str) => timezone_str,
             _ => {
                 return Err("Unable to find timezone in parsed JSON".to_string());
@@ -119,6 +185,8 @@ impl Locator {
         };
 
         let ip = ip.to_string();
+        let latitude = latitude_str.to_string();
+        let longitude = longitude_str.to_string();
         let city = city_str.to_string();
         let region = region_str.to_string();
         let country = country_str.to_string();

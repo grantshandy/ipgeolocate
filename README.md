@@ -1,25 +1,18 @@
 # ipgeolocate
 Get IP address geolocation information freely.
 
+```
+ipgeolocate = "0.2.5"
+```
 Add to `Cargo.toml`.
-```
-ipgeolocate = 0.2.4
-```
-
-**MAXIUMUM 15,000 queries per hour per user!!!**
-
-For most people this limit should be ok.
 
 ## Example
 Using locator is really quite easy:
 ```
 use locator::Locator;
-use std::net::Ipv4Addr;
 
 fn main() {
-    let ip = Ipv4Addr::new(1, 1, 1, 1);
-
-    match Locator::get_ipv4(ip) {
+    match Locator::ipwhois("1.1.1.1") {
       Ok(ip) => println!("{} - {}", ip.ip, ip.city),
       Err(error) => println!("Error getting data: {}", error),
     };
@@ -27,6 +20,17 @@ fn main() {
 ```
 
 This and more examples are found in the examples directory.
+
+## Query Limits
+Each service included in this library has a weekly, hourly, or monthly limit.
+Some have more free queries, but are less reliable.
+
+Here are the query limits:
+
+| Service   | Limit         |
+| --------- | ------------- |
+| ipwhois   | 10,000/month  |
+| freegeoip | 15,000/hour   |
 
 ## Fields
 The API can get these fields about IP addresses.
@@ -36,12 +40,8 @@ The API can get these fields about IP addresses.
 - longitude
 - city
 - region
-- country_code
 - country
-- timezone_gmt
 - timezone
-- isp
-- iptype
 
 ## Credits
 Grant Handy <grantshandy@gmail.com>

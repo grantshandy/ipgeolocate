@@ -5,8 +5,17 @@ use std::env;
 fn main() {
     let args: Vec<_> = env::args().collect();
 
-    match Locator::get(args[1].to_string().as_str()) {
-      Ok(ip) => println!("{} - {} ({})", ip.ip, ip.city, ip.country),
-      Err(error) => println!("Error getting data: {}", error),
+    if args[1].to_string().as_str() == "ipwhois" {
+        match Locator::ipwhois(args[2].to_string().as_str()) {
+            Ok(ip) => println!("ipwhois: {} ({})", ip.ip, ip.country),
+            Err(error) => println!("Error getting data: {}.", error),
+        };
+    } else if args[1].to_string().as_str() == "freegeoip" {
+        match Locator::freegeoip(args[2].to_string().as_str()) {
+            Ok(ip) => println!("ipwhois: {} ({})", ip.ip, ip.country),
+            Err(error) => println!("Error getting data: {}.", error),
+        };
+    } else {
+        eprintln!("cli: must use formatting 'cli <SERVICE> <IP>'");
     };
 }
