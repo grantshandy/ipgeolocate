@@ -2,7 +2,7 @@
 Get IP address geolocation information freely.
 
 ```
-ipgeolocate = "0.2.6"
+ipgeolocate = "0.2.7"
 ```
 Add to `Cargo.toml`.
 
