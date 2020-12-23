@@ -12,6 +12,21 @@ pub struct Locator {
 }
 
 impl Locator {
+	pub fn get(ip: &str, service: &str) -> std::result::Result<Self, String> {
+        if service == "freegeoip" {
+            return Locator::freegeoip(ip)
+        } else if service == "ipapi" {
+            return Locator::ipapi(ip)
+        } else if service == "ipapico" {
+            return Locator::ipapico(ip)
+        } else if service == "ipwhois" {
+            return Locator::ipwhois(ip)
+		} else {
+			return Err(format!("ipgeolocate: {} is not a valid service.", service))
+		}
+
+	}
+
     pub fn freegeoip(ip: &str) -> std::result::Result<Self, String> {
         let url = format!("https://freegeoip.app/json/{}", ip);
 

@@ -2,7 +2,7 @@
 Get IP address geolocation information freely.
 
 ```
-ipgeolocate = "0.2.7"
+ipgeolocate = "0.2.8"
 ```
 Add to `Cargo.toml`.
 
@@ -50,8 +50,10 @@ The API can get these fields about IP addresses.
 ## Credits
 Grant Handy <grantshandy@gmail.com>
 
-APIs included
+APIs included:
 - https://freegeoip.app/
 - https://ipwhois.app/
 - https://ip-api.com/
 - https://ipapi.co/
+
+Written with love, in Rust.
