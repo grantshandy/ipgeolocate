@@ -2,18 +2,22 @@
 Get IP address geolocation information freely.
 
 ```
-ipgeolocate = "0.2.8"
+ipgeolocate = "0.2.9"
 ```
 Add to `Cargo.toml`.
 
 ## Example
 Using locator is really quite easy:
 ```
-use locator::Locator;
+use ipgeolocate::Locator;
 
+// Prints the city where 1.1.1.1 is.
 fn main() {
-    match Locator::ipapi("1.1.1.1") {
-      Ok(ip) => println!("{} - {}", ip.ip, ip.city),
+	let ip = "1.1.1.1";
+	let service = "ipapico";
+
+    match Locator::get(ip, service) {
+      Ok(ip) => println!("{}: {} - {} ({})", service, ip.ip, ip.city, ip.country),
       Err(error) => println!("Error getting data: {}", error),
     };
 }
@@ -35,6 +39,8 @@ Here are the query limits:
 | ipapi.co      | 1,000/day (30,000/month)  |
 
 You can use each of these just by running the function of the same name.
+
+freegeoip.app is not recommended because it has issues reliably getting the correct latitude and longitude for IP addresses.
 
 ## Fields
 The API can get these fields about IP addresses.
