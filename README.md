@@ -2,21 +2,19 @@
 Get IP address geolocation information freely.
 
 ```
-ipgeolocate = "0.3.0"
+ipgeolocate = "0.3.1"
 ```
 Add to `Cargo.toml`.
 
 ## Example
 Using locator is really quite easy:
 ```
-use ipgeolocate::Locator;
+use ipgeolocate::{Locator, Service};
 
-// Prints the city and country where 1.1.1.1 is located.
+// Prints the city where 1.1.1.1 is.
 fn main() {
-    let service = "ipwhois";
-
-    match Locator::get("1.1.1.1", service) {
-      Ok(ip) => println!("{}: {} - {} ({})", service, ip.ip, ip.city, ip.country),
+    match Locator::get("1.1.1.1", Service::IpApi) {
+      Ok(ip) => println!("ipapi: {} - {} ({})", ip.ip, ip.city, ip.country),
       Err(error) => println!("Error getting data: {}", error),
     };
 }
