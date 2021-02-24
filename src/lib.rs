@@ -63,7 +63,7 @@
 
 use serde_json::Value;
 use std::fmt;
-use std::net::IpAddr;
+use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 use ureq::get;
 
 /// Services (apis) that can be used for accessing geolocation data.
@@ -128,10 +128,24 @@ pub struct Locator {
 }
 
 impl Locator {
-    /// Gets IP information from an `IpAddr`
+    /// Gets IP information from an [`Ipv4Addr`]
+    pub fn get_ipv4(ip: Ipv4Addr, service: Service) -> std::result::Result<Self, GeoError> {
+        Locator::get(&ip.to_string(), service)
+    }
+
+    /// Gets IP information from an [`Ipv6Addr`]
+    pub fn get_ipv6(ip: Ipv6Addr, service: Service) -> std::result::Result<Self, GeoError> {
+        Locator::get(&ip.to_string(), service)
+    }
+
+    /// Gets IP information from an [`IpAddr`]
     pub fn get_ipaddr(ip: IpAddr, service: Service) -> std::result::Result<Self, GeoError> {
         Locator::get(&ip.to_string(), service)
     }
+
+    /// [`IpAddr`]: std::net::IpAddr
+    /// [`Ipv4Addr`]: std::net::Ipv4Addr
+    /// [`Ipv6Addr`]: std::net::Ipv6Addr
 
     /// Gets IP information from just a string (not reccomended for most uses)
     pub fn get(ip: &str, service: Service) -> std::result::Result<Self, GeoError> {
