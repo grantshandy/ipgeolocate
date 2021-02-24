@@ -11,7 +11,7 @@
 //! ```
 //! use ipgeolocate::{Locator, Service};
 
-//! Prints the city where 1.1.1.1 is.
+//! // Prints the city where 1.1.1.1 is.
 //! fn main() {
 //!     match Locator::get("1.1.1.1", Service::IpApi) {
 //!       Ok(ip) => println!("ipapi: {} - {} ({})", ip.ip, ip.city, ip.country),
@@ -23,23 +23,24 @@
 //! This and more examples are found in the examples directory.
 
 //! ## Query Limits
-//! Each service included in this library has a weekly, hourly, or monthly limit.
+//! Each service included in this library has a weekly, hourly, or monthly limit.\
+//!
 //! Some have more free queries, but are less reliable.
-
+//!
 //! Here are the query limits:
-
+//!```
 //! | Service       | Limit                     |
 //! | ---------     | ------------------------- |
 //! | ipwhois.app   | 10,000/month              |
 //! | freegeoip.app | 15,000/hour               |
 //! | ip-api.com    | 45/minute                 |
 //! | ipapi.co      | 1,000/day (30,000/month)  |
-
-//! You can use each of these just by running the function of the same name.
-
+//!```
+//!
 //! freegeoip.app is not recommended because it has issues reliably getting the correct latitude and longitude for IP addresses.
 
 //! ## Fields
+//!
 //! The API can get these fields about IP addresses.
 
 //! - ip
