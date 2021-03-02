@@ -2,7 +2,7 @@
 //! Get IP address geolocation information freely.
 
 //! ```
-//! ipgeolocate = "0.3.3"
+//! ipgeolocate = "0.3.4"
 //! ```
 //! Add to `Cargo.toml`.
 
@@ -68,7 +68,7 @@ use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 use ureq::get;
 
 /// Services (apis) that can be used for accessing geolocation data.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum Service {
     IpWhois,
     IpApi,
@@ -95,7 +95,7 @@ impl fmt::Display for Service {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 /// A general ipgeolocate error for requests.
 pub enum GeoError {
     HttpError(String),
