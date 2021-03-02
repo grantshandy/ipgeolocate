@@ -95,7 +95,7 @@ impl fmt::Display for Service {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 /// A general ipgeolocate error for requests.
 pub enum GeoError {
     HttpError(String),
