@@ -1,71 +1,77 @@
 //! # ipgeolocate
 //! Get IP address geolocation information freely.
-
+//!
 //! ```
-//! ipgeolocate = "0.3.4"
+//! ipgeolocate = "0.3.5"
 //! ```
 //! Add to `Cargo.toml`.
-
+//!
 //! ## Example
-//! Using locator is really quite easy:
+//! Because `ipgeolocate` is an async library, you need an async runtime like [`tokio`](https://crates.io/crates/tokio) or [`async-std`](https://crates.io/crates/async-std) to run.
+//!
+//! Using `ipgeolocate` is really quite easy:
 //! ```
 //! use ipgeolocate::{Locator, Service};
-
+//!
 //! // Prints the city where 1.1.1.1 is.
-//! fn main() {
-//!     match Locator::get("1.1.1.1", Service::IpApi) {
-//!       Ok(ip) => println!("ipapi: {} - {} ({})", ip.ip, ip.city, ip.country),
-//!       Err(error) => println!("Error getting data: {}", error),
+//! #[tokio::main]
+//! async fn main() {
+//!     let service = Service::IpApi;
+//!     let ip = "1.1.1.1";
+//!
+//!     match Locator::get(ip, service).await {
+//!         Ok(ip) => println!("{} - {} ({})", ip.ip, ip.city, ip.country),
+//!         Err(error) => println!("Error: {}", error),
 //!     };
 //! }
 //! ```
-
-//! This and more examples are found in the examples directory.
-
-//! ## Query Limits
-//! Each service included in this library has a weekly, hourly, or monthly limit.\
 //!
+//! This and more examples are found in the examples directory.
+//!
+//! ## Query Limits
+//! Each service included in this library has a weekly, hourly, or monthly limit.
 //! Some have more free queries, but are less reliable.
 //!
 //! Here are the query limits:
-//!```
-//! | Service       | Limit                     |
-//! | ---------     | ------------------------- |
-//! | ipwhois.app   | 10,000/month              |
-//! | freegeoip.app | 15,000/hour               |
-//! | ip-api.com    | 45/minute                 |
-//! | ipapi.co      | 1,000/day (30,000/month)  |
-//!```
+//!
+//! | Service                                   | Limit                     |
+//! | ---------                                 | ------------------------- |
+//! | [ipwhois.app](https://freegeoip.app/)     | 10,000/month              |
+//! | [freegeoip.app](https://ipwhois.app/)     | 15,000/hour               |
+//! | [ip-api.com](https://ip-api.com/)         | 45/minute                 |
+//! | [ipapi.co](https://ipapi.co/)             | 1,000/day (30,000/month)  |
+//!
+//! You can use each of these just by running the function of the same name.
 //!
 //! freegeoip.app is not recommended because it has issues reliably getting the correct latitude and longitude for IP addresses.
-
-//! ## Fields
 //!
+//! ## Fields
 //! The API can get these fields about IP addresses.
-
-//! - ip
-//! - latitude
-//! - longitude
-//! - city
-//! - region
-//! - country
-//! - timezone
-
+//!
+//! - [`ip`](crate::Locator::ip)
+//! - [`latitude`](crate::Locator::latitude)
+//! - [`longitude`](crate::Locator::longitude)
+//! - [`city`](crate::Locator::city)
+//! - [`region`](crate::Locator::region)
+//! - [`country`](crate::Locator::country)
+//! - [`timezone`](crate::Locator::timezone)
+//!
 //! ## Credits
 //! Grant Handy <grantshandy@gmail.com>
-
+//!
 //! APIs included:
-//! - https://freegeoip.app/
-//! - https://ipwhois.app/
-//! - https://ip-api.com/
-//! - https://ipapi.co/
-
-// Written with love, in Rust.
+//! - [ipwhois.app](https://freegeoip.app/)
+//! - [freegeoip.app](https://ipwhois.app/)
+//! - [ip-api.com](https://ip-api.com/)
+//! - [ipapi.co](https://ipapi.co/)
+//!
+//! Written with love, in Rust.
+//!
 
 use serde_json::Value;
 use std::fmt;
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
-use ureq::get;
+use surf::get;
 
 /// Services (apis) that can be used for accessing geolocation data.
 #[derive(Debug, Clone, Copy)]
@@ -119,29 +125,36 @@ impl fmt::Display for GeoError {
 
 /// This is the main struct for making requests to the APIs.
 pub struct Locator {
+    /// Returns the IP address.
     pub ip: String,
+    /// Latitude of the IP address.
     pub latitude: String,
+    /// Longitude of the IP address.
     pub longitude: String,
+    /// City of the IP address.
     pub city: String,
+    /// Region or state of the IP address.
     pub region: String,
+    /// Country of the IP address.
     pub country: String,
+    /// Timezone of the IP address.
     pub timezone: String,
 }
 
 impl Locator {
     /// Gets IP information from an [`Ipv4Addr`]
-    pub fn get_ipv4(ip: Ipv4Addr, service: Service) -> std::result::Result<Self, GeoError> {
-        Locator::get(&ip.to_string(), service)
+    pub async fn get_ipv4(ip: Ipv4Addr, service: Service) -> std::result::Result<Self, GeoError> {
+        Locator::get(&ip.to_string(), service).await
     }
 
     /// Gets IP information from an [`Ipv6Addr`]
-    pub fn get_ipv6(ip: Ipv6Addr, service: Service) -> std::result::Result<Self, GeoError> {
-        Locator::get(&ip.to_string(), service)
+    pub async fn get_ipv6(ip: Ipv6Addr, service: Service) -> std::result::Result<Self, GeoError> {
+        Locator::get(&ip.to_string(), service).await
     }
 
     /// Gets IP information from an [`IpAddr`]
-    pub fn get_ipaddr(ip: IpAddr, service: Service) -> std::result::Result<Self, GeoError> {
-        Locator::get(&ip.to_string(), service)
+    pub async fn get_ipaddr(ip: IpAddr, service: Service) -> std::result::Result<Self, GeoError> {
+        Locator::get(&ip.to_string(), service).await
     }
 
     /// [`IpAddr`]: std::net::IpAddr
@@ -149,39 +162,25 @@ impl Locator {
     /// [`Ipv6Addr`]: std::net::Ipv6Addr
 
     /// Gets IP information from just a string (not reccomended for most uses)
-    pub fn get(ip: &str, service: Service) -> std::result::Result<Self, GeoError> {
+    pub async fn get(ip: &str, service: Service) -> std::result::Result<Self, GeoError> {
         match service {
-            Service::IpWhois => Locator::ipwhois(ip),
-            Service::IpApi => Locator::ipapi(ip),
-            Service::IpApiCo => Locator::ipapico(ip),
-            Service::FreeGeoIp => Locator::freegeoip(ip),
+            Service::IpWhois => Locator::ipwhois(ip).await,
+            Service::IpApi => Locator::ipapi(ip).await,
+            Service::IpApiCo => Locator::ipapico(ip).await,
+            Service::FreeGeoIp => Locator::freegeoip(ip).await,
         }
     }
 
-    fn freegeoip(ip: &str) -> std::result::Result<Self, GeoError> {
+    async fn freegeoip(ip: &str) -> std::result::Result<Self, GeoError> {
         let url = format!("https://freegeoip.app/json/{}", ip);
 
-        let response = get(&url).call();
-
-        if !response.ok() {
-            return Err(GeoError::HttpError(format!(
-                "Couldn't connect to freegeoip.app"
-            )));
-        };
-
-        // Turn the data into a string.
-        let data = match response.into_string() {
-            Ok(data) => data,
-            Err(error) => {
-                return Err(GeoError::ParseError(format!(
-                    "Couldn't transform to string: {}",
-                    error
-                )));
-            }
+        let response = match get(&url).recv_string().await {
+            Ok(response) => response,
+            Err(_) => return Err(GeoError::HttpError(format!("Couldn't connect to freegeoip.app"))),
         };
 
         // Turn the data into parsed_json
-        let parsed_json: Value = match serde_json::from_str(&data) {
+        let parsed_json: Value = match serde_json::from_str(&response) {
             Ok(parsed_json) => parsed_json,
             Err(error) => {
                 return Err(GeoError::ParseError(format!(
@@ -268,30 +267,16 @@ impl Locator {
         Ok(result)
     }
 
-    fn ipwhois(ip: &str) -> std::result::Result<Self, GeoError> {
+    async fn ipwhois(ip: &str) -> std::result::Result<Self, GeoError> {
         let url = format!("http://ipwhois.app/json/{}", ip);
 
-        let response = get(&url).call();
-
-        if !response.ok() {
-            return Err(GeoError::HttpError(format!(
-                "Couldn't connect to ipwhois.app"
-            )));
-        };
-
-        // Turn the data into a string.
-        let data = match response.into_string() {
-            Ok(data) => data,
-            Err(error) => {
-                return Err(GeoError::ParseError(format!(
-                    "Error transforming to string: {}",
-                    error
-                )));
-            }
+        let response = match get(&url).recv_string().await {
+            Ok(response) => response,
+            Err(_) => return Err(GeoError::HttpError(format!("Couldn't connect to ipwhois.app"))),
         };
 
         // Turn the data into parsed_json
-        let parsed_json: Value = match serde_json::from_str(&data) {
+        let parsed_json: Value = match serde_json::from_str(&response) {
             Ok(parsed_json) => parsed_json,
             Err(error) => {
                 return Err(GeoError::ParseError(format!(
@@ -393,30 +378,16 @@ impl Locator {
         Ok(result)
     }
 
-    fn ipapi(ip: &str) -> std::result::Result<Self, GeoError> {
+    async fn ipapi(ip: &str) -> std::result::Result<Self, GeoError> {
         let url = format!("http://ip-api.com/json/{}", ip);
 
-        let response = get(&url).call();
-
-        if !response.ok() {
-            return Err(GeoError::HttpError(format!(
-                "Couldn't connect to ip-api.com"
-            )));
-        };
-
-        // Turn the data into a string.
-        let data = match response.into_string() {
-            Ok(data) => data,
-            Err(error) => {
-                return Err(GeoError::ParseError(format!(
-                    "Couldn't transform to string: {}",
-                    error
-                )));
-            }
+        let response = match get(&url).recv_string().await {
+            Ok(response) => response,
+            Err(_) => return Err(GeoError::HttpError(format!("Couldn't connect to ip-api.com"))),
         };
 
         // Turn the data into parsed_json
-        let parsed_json: Value = match serde_json::from_str(&data) {
+        let parsed_json: Value = match serde_json::from_str(&response) {
             Ok(parsed_json) => parsed_json,
             Err(error) => {
                 return Err(GeoError::ParseError(format!(
@@ -503,28 +474,16 @@ impl Locator {
         Ok(result)
     }
 
-    fn ipapico(ip: &str) -> std::result::Result<Self, GeoError> {
-        let url = format!("http://ipapi.co/{}/json/", ip);
+    async fn ipapico(ip: &str) -> std::result::Result<Self, GeoError> {
+        let url = format!("https://ipapi.co/{}/json/", ip);
 
-        let response = get(&url).call();
-
-        if !response.ok() {
-            return Err(GeoError::HttpError(format!("Couldn't connect to ipapi.co")));
-        };
-
-        // Turn the data into a string.
-        let data = match response.into_string() {
-            Ok(data) => data,
-            Err(error) => {
-                return Err(GeoError::ParseError(format!(
-                    "Couldn't transform to string: {}",
-                    error
-                )));
-            }
+        let response = match get(&url).recv_string().await {
+            Ok(response) => response,
+            Err(_) => return Err(GeoError::HttpError(format!("Couldn't connect to ipapi.co"))),
         };
 
         // Turn the data into parsed_json
-        let parsed_json: Value = match serde_json::from_str(&data) {
+        let parsed_json: Value = match serde_json::from_str(&response) {
             Ok(parsed_json) => parsed_json,
             Err(error) => {
                 return Err(GeoError::ParseError(format!(

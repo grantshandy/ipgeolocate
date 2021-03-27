@@ -2,20 +2,26 @@
 Get IP address geolocation information freely.
 
 ```
-ipgeolocate = "0.3.4"
+ipgeolocate = "0.3.5"
 ```
 Add to `Cargo.toml`.
 
 ## Example
-Using locator is really quite easy:
+Because `ipgeolocate` is an async library, you need an async runtime like [`tokio`](https://crates.io/crates/tokio) or [`async-std`](https://crates.io/crates/async-std) to run.
+
+Using `ipgeolocate` is really quite easy:
 ```
 use ipgeolocate::{Locator, Service};
 
 // Prints the city where 1.1.1.1 is.
-fn main() {
-    match Locator::get("1.1.1.1", Service::IpApi) {
-      Ok(ip) => println!("ipapi: {} - {} ({})", ip.ip, ip.city, ip.country),
-      Err(error) => println!("Error getting data: {}", error),
+#[tokio::main]
+async fn main() {
+    let service = Service::IpApi;
+    let ip = "1.1.1.1";
+
+    match Locator::get(ip, service).await {
+        Ok(ip) => println!("{} - {} ({})", ip.ip, ip.city, ip.country),
+        Err(error) => println!("Error: {}", error),
     };
 }
 ```
@@ -28,12 +34,12 @@ Some have more free queries, but are less reliable.
 
 Here are the query limits:
 
-| Service       | Limit                     |
-| ---------     | ------------------------- |
-| ipwhois.app   | 10,000/month              |
-| freegeoip.app | 15,000/hour               |
-| ip-api.com    | 45/minute                 |
-| ipapi.co      | 1,000/day (30,000/month)  |
+| Service                                   | Limit                     |
+| ---------                                 | ------------------------- |
+| [ipwhois.app](https://freegeoip.app/)     | 10,000/month              |
+| [freegeoip.app](https://ipwhois.app/)     | 15,000/hour               |
+| [ip-api.com](https://ip-api.com/)         | 45/minute                 |
+| [ipapi.co](https://ipapi.co/)             | 1,000/day (30,000/month)  |
 
 You can use each of these just by running the function of the same name.
 
