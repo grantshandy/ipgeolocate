@@ -1,4 +1,8 @@
 # ipgeolocate
+[![Crates.io](https://img.shields.io/crates/v/ipgeolocate.svg)](https://crates.io/crates/ipgeolocate)
+[![API](https://docs.rs/ipgeolocate/badge.svg)](https://docs.rs/ipgeolocate)
+[![Crates.io](https://img.shields.io/crates/d/ipgeolocate)](https://crates.io/crates/ipgeolocate)
+
 Get IP address geolocation information freely.
 
 ```
