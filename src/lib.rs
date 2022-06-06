@@ -114,16 +114,17 @@ impl fmt::Display for GeoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             GeoError::HttpError(error) => {
-                write!(f, "HTTP Request Error: {}", error.to_string())
+                write!(f, "HTTP Request Error: {}", error)
             }
             GeoError::ParseError(error) => {
-                write!(f, "JSON Parsing Error: {}", error.to_string())
+                write!(f, "JSON Parsing Error: {}", error)
             }
         }
     }
 }
 
 /// This is the main struct for making requests to the APIs.
+#[derive(Debug, Clone)]
 pub struct Locator {
     /// Returns the IP address.
     pub ip: String,
@@ -161,7 +162,7 @@ impl Locator {
     /// [`Ipv4Addr`]: std::net::Ipv4Addr
     /// [`Ipv6Addr`]: std::net::Ipv6Addr
 
-    /// Gets IP information from just a string (not reccomended for most uses)
+    /// Gets IP information from just a string (not recommended for most uses)
     pub async fn get(ip: &str, service: Service) -> std::result::Result<Self, GeoError> {
         match service {
             Service::IpWhois => Locator::ipwhois(ip).await,
@@ -176,7 +177,11 @@ impl Locator {
 
         let response = match get(&url).recv_string().await {
             Ok(response) => response,
-            Err(_) => return Err(GeoError::HttpError(format!("Couldn't connect to freegeoip.app"))),
+            Err(_) => {
+                return Err(GeoError::HttpError(
+                    "Couldn't connect to freegeoip.app".to_string(),
+                ))
+            }
         };
 
         // Turn the data into parsed_json
@@ -272,7 +277,11 @@ impl Locator {
 
         let response = match get(&url).recv_string().await {
             Ok(response) => response,
-            Err(_) => return Err(GeoError::HttpError(format!("Couldn't connect to ipwhois.app"))),
+            Err(_) => {
+                return Err(GeoError::HttpError(
+                    "Couldn't connect to ipwhois.app".to_string(),
+                ))
+            }
         };
 
         // Turn the data into parsed_json
@@ -383,7 +392,11 @@ impl Locator {
 
         let response = match get(&url).recv_string().await {
             Ok(response) => response,
-            Err(_) => return Err(GeoError::HttpError(format!("Couldn't connect to ip-api.com"))),
+            Err(_) => {
+                return Err(GeoError::HttpError(
+                    "Couldn't connect to ip-api.com".to_string(),
+                ))
+            }
         };
 
         // Turn the data into parsed_json
@@ -479,7 +492,11 @@ impl Locator {
 
         let response = match get(&url).recv_string().await {
             Ok(response) => response,
-            Err(_) => return Err(GeoError::HttpError(format!("Couldn't connect to ipapi.co"))),
+            Err(_) => {
+                return Err(GeoError::HttpError(
+                    "Couldn't connect to ipapi.co".to_string(),
+                ))
+            }
         };
 
         // Turn the data into parsed_json
