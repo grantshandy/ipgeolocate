@@ -2,3 +2,5 @@
 Cargo.lock
 /example/target
 /example/Cargo.lock
+/.idea
+/src/main.rs
