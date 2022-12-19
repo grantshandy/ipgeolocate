@@ -11,7 +11,7 @@ keywords = ["geolocation", "ip", "locator", "geolocator", "geolocate"]
 categories = ["network-programming"]
 
 [dependencies]
-serde_json = "1.0.89"
+serde_json = "1.0.91"
 surf = { version = "2.3.2", default-features = false }
 futures = "0.3.25"
 
