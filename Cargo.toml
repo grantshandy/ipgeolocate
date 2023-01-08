@@ -16,7 +16,7 @@ surf = { version = "2.3.2", default-features = false }
 futures = "0.3.25"
 
 [dev-dependencies]
-tokio = { version = "1.23.0", features = ["full"] }
+tokio = { version = "1.24.1", features = ["full"] }
 
 [features]
 default = ["surf/default"]
