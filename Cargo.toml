@@ -10,12 +10,19 @@ documentation = "https://docs.rs/ipgeolocate"
 keywords = ["geolocation", "ip", "locator", "geolocator", "geolocate"]
 categories = ["network-programming"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-serde_json = "1.0.64"
-surf = "2.2.0"
-futures = "0.3.13"
+serde_json = "1.0.91"
+surf = { version = "2.3.2", default-features = false }
+futures = "0.3.26"
 
 [dev-dependencies]
-tokio = { version = "1.4.0", features = ["full"] }
+tokio = { version = "1.25.0", features = ["full"] }
+
+[features]
+default = ["surf/default"]
+# Replace "curl-client" with "h1-client-rustls" in "surf/default"
+h1-client-rustls = [
+    "surf/h1-client-rustls",
+    "surf/middleware-logger",
+    "surf/encoding",
+]
