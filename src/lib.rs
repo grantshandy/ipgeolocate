@@ -68,10 +68,10 @@
 //! Written with love, in Rust.
 //!
 
+use reqwest::get;
 use serde_json::Value;
 use std::fmt;
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
-use surf::get;
 
 /// Services (apis) that can be used for accessing geolocation data.
 #[derive(Debug, Clone, Copy)]
@@ -175,7 +175,7 @@ impl Locator {
     async fn freegeoip(ip: &str) -> std::result::Result<Self, GeoError> {
         let url = format!("https://freegeoip.app/json/{}", ip);
 
-        let response = match get(&url).recv_string().await {
+        let response = match get(&url).await.unwrap().text().await {
             Ok(response) => response,
             Err(_) => {
                 return Err(GeoError::HttpError(
@@ -275,7 +275,7 @@ impl Locator {
     async fn ipwhois(ip: &str) -> std::result::Result<Self, GeoError> {
         let url = format!("http://ipwhois.app/json/{}", ip);
 
-        let response = match get(&url).recv_string().await {
+        let response = match get(&url).await.unwrap().text().await {
             Ok(response) => response,
             Err(_) => {
                 return Err(GeoError::HttpError(
@@ -390,7 +390,7 @@ impl Locator {
     async fn ipapi(ip: &str) -> std::result::Result<Self, GeoError> {
         let url = format!("http://ip-api.com/json/{}", ip);
 
-        let response = match get(&url).recv_string().await {
+        let response = match get(&url).await.unwrap().text().await {
             Ok(response) => response,
             Err(_) => {
                 return Err(GeoError::HttpError(
@@ -490,7 +490,7 @@ impl Locator {
     async fn ipapico(ip: &str) -> std::result::Result<Self, GeoError> {
         let url = format!("https://ipapi.co/{}/json/", ip);
 
-        let response = match get(&url).recv_string().await {
+        let response = match get(&url).await.unwrap().text().await {
             Ok(response) => response,
             Err(_) => {
                 return Err(GeoError::HttpError(
