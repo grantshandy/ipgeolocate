@@ -72,6 +72,7 @@ use reqwest::get;
 use serde_json::Value;
 use std::fmt;
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
+use tracing::debug;
 
 /// Services (apis) that can be used for accessing geolocation data.
 #[derive(Debug, Clone, Copy)]
@@ -140,6 +141,8 @@ pub struct Locator {
     pub country: String,
     /// Timezone of the IP address.
     pub timezone: String,
+    /// ISP of the IP address
+    pub isp: String,
 }
 
 impl Locator {
@@ -258,6 +261,7 @@ impl Locator {
         let region = region.to_string();
         let country = country.to_string();
         let timezone = timezone.to_string();
+        let isp = String::default();
 
         let result = Locator {
             ip,
@@ -267,6 +271,7 @@ impl Locator {
             region,
             country,
             timezone,
+            isp,
         };
 
         Ok(result)
@@ -382,6 +387,7 @@ impl Locator {
             region,
             country,
             timezone,
+            isp: String::default(),
         };
 
         Ok(result)
@@ -409,6 +415,8 @@ impl Locator {
                 )));
             }
         };
+
+        debug!("ipgeolocate return object looks like: {}", parsed_json);
 
         // Get latitude from parsed_json
         let latitude = match &parsed_json["lat"] {
@@ -466,6 +474,15 @@ impl Locator {
             }
         };
 
+        let isp = match &parsed_json["isp"] {
+            Value::String(isp) => isp,
+            _ => {
+                return Err(GeoError::ParseError(
+                    "Unable to find timezone in parsed JSON".to_string(),
+                ));
+            }
+        };
+
         let ip = ip.to_string();
         let latitude = latitude.to_string();
         let longitude = longitude.to_string();
@@ -473,6 +490,7 @@ impl Locator {
         let region = region.to_string();
         let country = country.to_string();
         let timezone = timezone.to_string();
+        let isp = isp.to_string();
 
         let result = Locator {
             ip,
@@ -482,6 +500,7 @@ impl Locator {
             region,
             country,
             timezone,
+            isp,
         };
 
         Ok(result)
@@ -573,6 +592,7 @@ impl Locator {
         let region = region.to_string();
         let country = country.to_string();
         let timezone = timezone.to_string();
+        let isp: String = String::default();
 
         let result = Locator {
             ip,
@@ -582,6 +602,7 @@ impl Locator {
             region,
             country,
             timezone,
+            isp,
         };
 
         Ok(result)
