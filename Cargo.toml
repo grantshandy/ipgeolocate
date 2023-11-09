@@ -12,17 +12,10 @@ categories = ["network-programming"]
 
 [dependencies]
 serde_json = "1.0.91"
-surf = { version = "2.3.2", default-features = false }
+reqwest = "0.11"
 futures = "0.3.26"
+tracing = "0.1"
+tracing-subscriber = "0.3"
 
 [dev-dependencies]
 tokio = { version = "1.25.0", features = ["full"] }
-
-[features]
-default = ["surf/default"]
-# Replace "curl-client" with "h1-client-rustls" in "surf/default"
-h1-client-rustls = [
-    "surf/h1-client-rustls",
-    "surf/middleware-logger",
-    "surf/encoding",
-]
