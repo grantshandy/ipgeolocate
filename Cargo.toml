@@ -1,11 +1,11 @@
 [package]
 name = "ipgeolocate"
-version = "0.3.5"
-authors = ["Grant Handy <grantshandy@gmail.com>"]
+version = "0.3.6"
+authors = ["Grant Handy <granthandy@proton.me>"]
 edition = "2018"
 license = "GPL-3.0"
 description = "Get IP address geolocation information freely."
-repository = "https://github.com/DefunctLizard/ipgeolocate/"
+repository = "https://github.com/grantshandy/ipgeolocate/"
 documentation = "https://docs.rs/ipgeolocate"
 keywords = ["geolocation", "ip", "locator", "geolocator", "geolocate"]
 categories = ["network-programming"]
