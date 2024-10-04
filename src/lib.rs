@@ -396,8 +396,8 @@ impl Locator {
     async fn ipapi(ip: &str) -> std::result::Result<Self, GeoError> {
         let url = format!("http://ip-api.com/json/{}", ip);
 
-        let response = match get(&url).await.unwrap().text().await {
-            Ok(response) => response,
+        let response = match get(&url).await {
+            Ok(resp) => resp,
             Err(_) => {
                 return Err(GeoError::HttpError(
                     "Couldn't connect to ip-api.com".to_string(),
@@ -405,8 +405,17 @@ impl Locator {
             }
         };
 
+        let response_body = match response.text().await {
+            Ok(response_body) => response_body,
+            Err(_) => {
+                return Err(GeoError::HttpError(
+                    "Couldn't read data from ip-api.com".to_string(),
+                ))
+            }
+        };
+
         // Turn the data into parsed_json
-        let parsed_json: Value = match serde_json::from_str(&response) {
+        let parsed_json: Value = match serde_json::from_str(&response_body) {
             Ok(parsed_json) => parsed_json,
             Err(error) => {
                 return Err(GeoError::ParseError(format!(
